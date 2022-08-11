@@ -1,3 +1,5 @@
+import './Input.module.css'
+
 export function Input({ label = "", type = "", placeholder = "", onValueChange = () => { } }) {
 	return (
 		<div className="input-element">

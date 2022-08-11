@@ -1,12 +1,20 @@
-import { useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { Button } from '../Components/Button'
 import { Input } from '../Components/Input'
+import { Header } from '../Layouts/Header'
+import GlobalContext from '../Contexts/Global'
 
 export function Dashboard() {
-	const [name, setName] = useState("")
 	let tempName = "";
+	const [name, setName] = useState("")
+	const globalContext = useContext(GlobalContext)
+	useEffect(() => {
+		setName(globalContext.currentUser)
+	}, [])
 	const assignName = function() {
-		setName(tempName);
+		setName(tempName)
+		globalContext.currentUser = tempName
+		localStorage.setItem("CURR_USER", tempName)
 	}
 	const nameInputValueChange = function(e) {
 		const { value } = e.target
@@ -20,13 +28,11 @@ export function Dashboard() {
 	}
 	return (
 		<div>
-			<header>
-				<h1>Dashboard</h1>
-			</header>
+			<Header />
 			<main>
 				<h2>{welcomeMessage()}</h2>
 				<section>
-					<section className="name-input">
+					<section className="button-group">
 						<Input label="Nombre" placeholder="Ej.: Fulanito de tal" onValueChange={nameInputValueChange} />
 						<Button text="Asignar" onClick={assignName} />
 					</section>
