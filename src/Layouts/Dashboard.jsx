@@ -1,3 +1,6 @@
+import { Button } from '../Components/Button'
+import { Input } from '../Components/Input'
+
 export function Dashboard() {
 	return (
 		<div>
@@ -8,11 +11,11 @@ export function Dashboard() {
 				<h2>Welcome user</h2>
 				<section>
 					<section className="button-group">
-						<input type="text" placeholder="Codigo de la reunión" />
-						<button>Unirse</button>
+						<Input label="Código de la reunión" placeholder="Ej.: ABC-123" />
+						<Button text="Unirse" />
 					</section>
 					<section className="name-input">
-						<input type="text" />
+						<Input label="Nombre" placeholder="Ingrese un nombre" />
 					</section>
 				</section>
 			</main>
