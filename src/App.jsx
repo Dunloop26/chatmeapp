@@ -1,6 +1,6 @@
 import './App.css'
-import { Dashboard } from './Layouts/Dashboard'
-import GlobalContext from './Contexts/Global'
+import { Dashboard } from '@Pages/Dashboard'
+import GlobalContext from '@Contexts/Global'
 import { useEffect, useState } from 'react'
 
 export function App() {

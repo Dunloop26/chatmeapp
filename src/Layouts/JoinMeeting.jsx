@@ -1,10 +1,11 @@
 import { useContext, useEffect, useState } from 'react'
-import { Button } from '../Components/Button'
-import { Input } from '../Components/Input'
-import { Header } from '../Layouts/Header'
-import GlobalContext from '../Contexts/Global'
+import { Button } from '@Components/Button'
+import { Input } from '@Components/Input'
+import { Header } from '@Layouts/Header'
+import storage from '@Services/Storage.js'
+import GlobalContext from '@Contexts/Global'
 
-export function Dashboard() {
+export function JoinMeeting() {
 	let tempName = "";
 	const [name, setName] = useState("")
 	const globalContext = useContext(GlobalContext)
@@ -13,8 +14,8 @@ export function Dashboard() {
 	}, [])
 	const assignName = function() {
 		setName(tempName)
+		storage.storeUserName(tempName);
 		globalContext.currentUser = tempName
-		localStorage.setItem("CURR_USER", tempName)
 	}
 	const nameInputValueChange = function(e) {
 		const { value } = e.target
