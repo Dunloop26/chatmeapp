@@ -3,7 +3,8 @@ import { Button } from '@Components/Button'
 import { Input } from '@Components/Input'
 import { Header } from '@Layouts/Header'
 import { Link } from 'react-router-dom'
-import storage from '@Services/Storage.js'
+import storage from '@Services/Storage'
+import { validate } from '@Services/MeetingCode'
 import GlobalContext from '@Contexts/Global'
 
 export function JoinMeeting() {
@@ -24,6 +25,9 @@ export function JoinMeeting() {
 		if (room.length > 6) room = room.slice(0, 6)
 		setRoom(room);
 	}
+	const isRoomCodeValid = function(room) {
+		return validate(room)
+	}
 	const nameInputValueChange = function(e) {
 		const { value } = e.target
 		tempName = value
@@ -33,6 +37,9 @@ export function JoinMeeting() {
 			return name.length > 0 ? ` ${name}` : "";
 		}
 		return "Welcome" + solveName() + "!"
+	}
+	const getErrorMessage = function() {
+		return "El código de la reunión no es válido, debe contener solo 6 caracteres y solo puede contener entre la A y la F, entre el 0 y el 9";
 	}
 	return (
 		<div>
@@ -45,9 +52,9 @@ export function JoinMeeting() {
 						<Button text="Asignar" onClick={assignName} />
 					</section>
 					<section className="button-group">
-						<Input label="Código de la reunión" placeholder="Ej.: ABC-123" onValueChange={roomInputValueChange} value={room} />
+						<Input label="Código de la reunión" placeholder="Ej.: ABC-123" onValueChange={roomInputValueChange} value={room} errorMessage={room.length > 0 && !isRoomCodeValid(room) && getErrorMessage()} />
 						<Link to={`/meet/${room}`}>
-							<Button text="Unirse" />
+							<Button text="Unirse" disabled={!isRoomCodeValid(room)}/>
 						</Link>
 					</section>
 				</section>
