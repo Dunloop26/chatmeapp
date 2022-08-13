@@ -2,12 +2,14 @@ import { useContext, useEffect, useState } from 'react'
 import { Button } from '@Components/Button'
 import { Input } from '@Components/Input'
 import { Header } from '@Layouts/Header'
+import { Link } from 'react-router-dom'
 import storage from '@Services/Storage.js'
 import GlobalContext from '@Contexts/Global'
 
 export function JoinMeeting() {
 	let tempName = "";
 	const [name, setName] = useState("")
+	const [room, setRoom] = useState("")
 	const globalContext = useContext(GlobalContext)
 	useEffect(() => {
 		setName(globalContext.currentUser)
@@ -16,6 +18,10 @@ export function JoinMeeting() {
 		setName(tempName)
 		storage.storeUserName(tempName);
 		globalContext.currentUser = tempName
+	}
+	const roomInputValueChange = function(e) {
+		const { value: room } = e.target;
+		setRoom(room);
 	}
 	const nameInputValueChange = function(e) {
 		const { value } = e.target
@@ -29,7 +35,7 @@ export function JoinMeeting() {
 	}
 	return (
 		<div>
-			<Header />
+			<Header title="Dashboard" />
 			<main>
 				<h2>{welcomeMessage()}</h2>
 				<section>
@@ -38,8 +44,10 @@ export function JoinMeeting() {
 						<Button text="Asignar" onClick={assignName} />
 					</section>
 					<section className="button-group">
-						<Input label="Código de la reunión" placeholder="Ej.: ABC-123" />
-						<Button text="Unirse" />
+						<Input label="Código de la reunión" placeholder="Ej.: ABC-123" onValueChange={roomInputValueChange} />
+						<Link to={`/meet/${room}`}>
+							<Button text="Unirse" />
+						</Link>
 					</section>
 				</section>
 			</main>
