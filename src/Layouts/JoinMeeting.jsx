@@ -20,7 +20,8 @@ export function JoinMeeting() {
 		globalContext.currentUser = tempName
 	}
 	const roomInputValueChange = function(e) {
-		const { value: room } = e.target;
+		let { value: room } = e.target;
+		if (room.length > 6) room = room.slice(0, 6)
 		setRoom(room);
 	}
 	const nameInputValueChange = function(e) {
@@ -44,7 +45,7 @@ export function JoinMeeting() {
 						<Button text="Asignar" onClick={assignName} />
 					</section>
 					<section className="button-group">
-						<Input label="Código de la reunión" placeholder="Ej.: ABC-123" onValueChange={roomInputValueChange} />
+						<Input label="Código de la reunión" placeholder="Ej.: ABC-123" onValueChange={roomInputValueChange} value={room} />
 						<Link to={`/meet/${room}`}>
 							<Button text="Unirse" />
 						</Link>
