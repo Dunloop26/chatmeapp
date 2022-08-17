@@ -3,7 +3,8 @@ import { Button } from "@Components/Button"
 import { Link } from "react-router-dom"
 import { useParams } from "react-router-dom"
 import { MessageList } from "@Layouts/MessageList"
-import { useContext, useState } from "react"
+import { useContext, useState, useEffect } from "react"
+import socketSrv from "@Services/Socket"
 import GlobalContext from "@Contexts/Global"
 
 export function ChatLog() {
@@ -11,12 +12,23 @@ export function ChatLog() {
 	const [messages, setMessages] = useState([])
 	const [tempMessage, setTempMessage] = useState([])
 	const { currentUser } = useContext(GlobalContext)
-	const onSendMessage = function() {
-		setMessages((prevMessages) => {
-			const messageCarrier = { author: currentUser, message: tempMessage }
-			setTempMessage("")
-			return [...prevMessages, messageCarrier]
+	useEffect(() => {
+		const io = socketSrv.getSocket()
+		io.on("chat:on_message", ({ author, message }) => {
+			setMessages((prevMessages) => {
+				return [...prevMessages, { author, message }]
+			})
 		})
+
+		return () => {
+			io.off("chat:on_message")
+		}
+	}, [])
+	const onSendMessage = function() {
+		const messageCarrier = { author: currentUser, message: tempMessage }
+		setTempMessage("")
+		const io = socketSrv.getSocket()
+		io.emit("chat:send_message", messageCarrier)
 	}
 	const onMessageValueChange = function(e) {
 		const { value } = e.target
